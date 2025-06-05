@@ -1,0 +1,26 @@
+let studentData = [];
+
+fetch("students.json")
+  .then(res => res.json())
+  .then(data => studentData = data);
+
+function onScanSuccess(decodedText, decodedResult) {
+  const student = studentData.find(s => s.id === decodedText);
+  if (student) {
+    document.getElementById("student-photo").src = student.photo;
+    document.getElementById("student-name").textContent = student.name;
+    document.getElementById("student-course").textContent = student.course;
+    document.getElementById("student-info").classList.remove("hidden");
+  } else {
+    alert("Student not found!");
+  }
+}
+
+new Html5Qrcode("reader").start(
+  { facingMode: "environment" },
+  {
+    fps: 10,
+    qrbox: { width: 250, height: 250 }
+  },
+  onScanSuccess
+);
